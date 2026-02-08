@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>birthday alleaa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+  margin:0;
+  background:#ffd6e8;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+.container{
+  background:#fff;
+  width:90%;
+  max-width:420px;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+.hidden{display:none;}
+button{
+  background:#ff8fc7;
+  border:none;
+  padding:12px 25px;
+  border-radius:25px;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+button:hover{background:#ff6fb3;}
+
+#gameArea{
+  position:relative;
+  width:100%;
+  height:300px;
+  background:#ffeaf3;
+  border-radius:15px;
+  margin-top:15px;
+  overflow:hidden;
+}
+
+#circle{
+  width:60px;
+  height:60px;
+  background:#ff7fb8;
+  border-radius:50%;
+  position:absolute;
+  cursor:pointer;
+}
+
+.score{
+  margin-top:10px;
+  font-weight:600;
+  font-size:16px;
+}
+
+.emoji{
+  position:absolute;
+  font-size:24px;
+  opacity:1;
+  animation:fadeUp 1s forwards;
+  pointer-events:none;
+}
+
+@keyframes fadeUp{
+  0%{transform:translateY(0); opacity:1;}
+  100%{transform:translateY(-50px); opacity:0;}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<!-- HALAMAN AWAL -->
+<div id="start">
+  <h2>hallooww allehoo ayoo 🎀</h2>
+  <p>selesaikan game sampai mendapatkan score 30</p>
+  <button onclick="startGame()">mulai game</button>
+</div>
+
+<!-- GAME -->
+<div id="game" class="hidden">
+  <p class="score">score: <span id="score">0</span></p>
+  <div id="gameArea">
+    <div id="circle" onclick="hit(event)"></div>
+  </div>
+  <p style="margin-top:10px;">jangan senyum senyum sendiri lehoo wkwkwk</p>
+</div>
+
+<!-- HASIL -->
+<div id="result" class="hidden">
+  <h2>happy birthday alleaa 🎉</h2>
+  <p>
+    semoga hari ini penuh hal baik buat kamu.  
+    walaupun kita udah lama nggak ketemu,  
+    rasanya kamu tetap dekat dan nggak pernah jauh.
+  </p>
+  <p>
+    aku pengen banget suatu hari nanti kita bisa ketemu lagi,  
+    cerita banyak hal, ketawa bareng,  
+    dan ngerayain momen kecil sama-sama.
+  </p>
+  <br><br>
+  <button onclick="playMusic()">putar lagu 🎵</button>
+</div>
+
+<!-- AUDIO -->
+<audio id="music">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_2f7b3c1a68.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="pop">
+  <source src="https://www.soundjay.com/button/sounds/button-16.mp3" type="audio/mpeg">
+</audio>
+
+</div>
+
+<script>
+let score = 0;
+
+function startGame(){
+  document.getElementById('start').classList.add('hidden');
+  document.getElementById('game').classList.remove('hidden');
+  moveCircle();
+}
+
+function hit(e){
+  score++;
+  document.getElementById('score').innerText = score;
+
+  // mainkan suara plop
+  document.getElementById('pop').currentTime = 0;
+  document.getElementById('pop').play();
+
+  // emoji lucu muncul
+  const emojis = ['😄','🎂','✨','🎉','🍰'];
+  const emoji = document.createElement('div');
+  emoji.className='emoji';
+  emoji.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+  emoji.style.left = e.clientX - e.target.getBoundingClientRect().left + 'px';
+  emoji.style.top = e.clientY - e.target.getBoundingClientRect().top + 'px';
+  document.getElementById('gameArea').appendChild(emoji);
+  setTimeout(()=>emoji.remove(),1000);
+
+  moveCircle();
+
+  if(score>=30){
+    document.getElementById('game').classList.add('hidden');
+    document.getElementById('result').classList.remove('hidden');
+  }
+}
+
+function moveCircle(){
+  const area = document.getElementById('gameArea');
+  const circle = document.getElementById('circle');
+  const maxX = area.clientWidth - 60;
+  const maxY = area.clientHeight - 60;
+  const x = Math.random()*maxX;
+  const y = Math.random()*maxY;
+  circle.style.left = x+'px';
+  circle.style.top = y+'px';
+}
+
+function playMusic(){
+  document.getElementById('music').play();
+}
+</script>
+</body>
+</html>
